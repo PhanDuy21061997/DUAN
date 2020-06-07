@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.demo.Repository.PersonnelRepository;
 import com.example.demo.Repository.UserRepository;
-import com.example.demo.dto.UserRequest;
+import com.example.demo.model.ApiResponse;
 import com.example.demo.model.Personnel;
 import com.example.demo.model.User;
 
@@ -31,11 +31,30 @@ public class controller {
 	PersonnelRepository personnelRepository ;
 	
 	
-	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
-	public ResponseEntity<Personnel> login(@RequestBody User user){
+	@RequestMapping(value = "/user/login1", method = RequestMethod.POST)
+	public ResponseEntity<Personnel> login1(@RequestBody User user){
 		return new ResponseEntity<Personnel>(personnelRepository.login(user.getUsername(), user.getPasswork()), HttpStatus.CREATED);
 	    }
 	
+	
+	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
+	public ApiResponse login(@RequestBody User user)
+	{
+		Personnel personnel=personnelRepository.login(user.getUsername(), user.getPasswork());
+		
+		if(user.getUsername()==null || user.getPasswork()==null)
+		{
+			return new ApiResponse(1,"error login");
+		}
+		
+		if(personnel==null)
+		{
+			return new ApiResponse(2,"error login");
+		}
+		
+		return new ApiResponse(200, "Login success", personnel);
+		//return new ApiResponse(2,"error login");
+	}
  
 	@RequestMapping(value = "/user/", method = RequestMethod.POST)
 	public Personnel saveContact(@Valid @RequestBody Personnel personnel) {

@@ -38,7 +38,7 @@ public class Personnel {
 	private int id_manage_p;
 	
 	
-	@OneToOne(targetEntity = User.class,cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = User.class,cascade = CascadeType.ALL,orphanRemoval = true)
 	@JoinColumn(name = "id_p",referencedColumnName ="id_p")
 	
 	private User user;
